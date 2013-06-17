@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+<meta charset=utf-8 />
     <head>
     	<link type="text/css" rel="stylesheet" href="stylesheet.css">
     	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
@@ -7,22 +8,7 @@
         <title>YOU SHALL BE ASSIMILATED</title>
     </head>
 <body>
-    <canvas id="myCanvas" width="578" height="200"></canvas>
-  	<script>
-	    var canvas = document.getElementById('myCanvas');
-	    var context = canvas.getContext('2d');
-      context.beginPath();
-      context.rect(200, 100, 200, 100);
-      context.fillStyle = 'black';
-      context.fill();
-
-    document.getElementById('myCanvas').addEventListener('click', function() {
-        context.clearRect(200, 100, 200, 100)
-		context.beginPath();
-		context.rect(300, 100, 200, 100);
-		context.fillStyle = 'black';
-		context.fill();
-      }, false);
-    </script>
+    <canvas id="space" width="900" height="685" style = "width: 75%; height: 75%; display: block; margin-left: auto; margin-right: auto;"></canvas>
+  	<script type="text/javascript" src="game.js"></script>
     </body>
 </html>
