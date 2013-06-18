@@ -14,27 +14,17 @@ drawBorg();
 federation.forEach(function(ships){
   ships.draw(context);
 })
-
   // event handler
 spaceCanvas.addEventListener('click', function() {
     tractorBeam(context);
     clickCount+=1;
-    setTimeout(function(){
-      for (var i = federation.length - 1; i >= 3; i--) {
-        if (collides(borgShip, federation[i])===true){
-          loseGame();
-        }        
-        else{
-          movement.up(federation[i]);
-        }
-      };
-      for (var i = federation.length - 4; i >= 0; i--) {
-        if (collides(borgShip, federation[i])===true){
-          loseGame();
-        }
-        else{
-          movement.left(federation[i]);
-        }
-      };
-    }, 50);
+    federation.forEach(function(ships){
+      if (collides(borgShip, ships)===true){
+        loseGame();
+        context.clearRect(0,0,spaceCanvas.width, spaceCanvas.height);
+        drawBorg();
+      }
+        setTimeout(attackBorg, 500);
+      // }
+    })
 }, false);

@@ -23,6 +23,19 @@ movement = {
     ship.draw(context);
   }
 };
+
+
+function attackBorg(){
+  for (var i = federation.length - 1; i >= 3; i--) {
+    movement.up(federation[i]);
+  }
+  for (var i = federation.length - 4; i >= 0; i--) {
+    movement.left(federation[i]);
+  }
+  setTimeout(attackBorg,500);
+};
+
+
 function drawBorg(){
   borgShip = new Image();
   borgShip.src = 'images/borg.png';
@@ -43,9 +56,3 @@ function tractorBeam(context){
 		})
 	}
  };
-function collides(a, b) {
-  return a.x < b.x + b.width && 
-         a.x + a.width > b.x &&
-         a.y < b.y + b.height && 
-         a.y + a.height > b.y;
-};

@@ -10,6 +10,8 @@ function loseGame(){
 		context.clearRect(ship.x, ship.y, ship.width, ship.height);      
 		ship.destroy = true;		
 	})
+	context.clearRect(0,0,spaceCanvas.width, spaceCanvas.height);
+	drawBorg();
 	context.font = '30pt Ariel';
 	context.fillStyle = 'white';
 	context.fillText("Resistance is futile.",400,400);
