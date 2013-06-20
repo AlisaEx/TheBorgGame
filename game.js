@@ -1,12 +1,22 @@
 var spaceCanvas = document.getElementById('space');
 var context = spaceCanvas.getContext('2d');
 var clickCount = 0;
+var animate = null;
+var federation = [];
+
+borgShip = new Entity(0,0,400,400);
+borgShip.imageLocation = 'images/borg.png';
+  // loop to create federation ships
+for (i=0; i<3; i++){
+  federation[i] = new Entity(600, (i+1)*75, 50, 10);
+  federation[i+3] = new Entity((i+1)*75, 600, 10, 50);
+}
 
 function clickMouse(){
   if(clickCount===0){
     tractorBeam(context);
     clickCount += 1;
-    setTimeout(attackBorg, 500);
+    animate = setInterval(attackBorg, 500);
   }
 }
 function tractorBeam(context){
@@ -19,21 +29,14 @@ function tractorBeam(context){
     context.stroke();
   })
 };
-function drawBorg(){
-  borgShip = new Image();
-  borgShip.src = 'images/borg.png';
-  borgShip.onload = function(){
-    context.drawImage(borgShip,0,0);
-  }
-};
 function gameDraw(){
-context.clearRect(0,0,spaceCanvas.width, spaceCanvas.height);
-federation.forEach(function(ships){
-  ships.draw(context);
-})
-drawBorg();
-spaceCanvas.addEventListener('click', clickMouse, false);
-}
+  context.clearRect(0,0,spaceCanvas.width, spaceCanvas.height);
+  federation.forEach(function(ships){
+    ships.draw(context);
+  })
+  borgShip.drawImg(borgShip.imageLocation)
+  spaceCanvas.addEventListener('click', clickMouse, false);
+};
 
 function startGame(){
   context.font = '30pt Ariel';
@@ -43,17 +46,40 @@ function startGame(){
 };
 
 function loseGame(){
-  clearTimeout(animate);
+  clearInterval(animate);
   spaceCanvas.removeEventListener('click', clickMouse);
   context.clearRect(0, 0, spaceCanvas.width, spaceCanvas.height)
-  drawBorg();
+  borgShip.drawImg(borgShip.imageLocation);
   context.font = '30pt Ariel';
   context.fillStyle = 'white';
   context.fillText("You have been assimilated.",300,400);
-  context.fillText("Resistance is futile.",350,500);
+};
+function attackBorg(){
+  for (var i = 0; i < 3; i++) {
+    if (collides(federation[i], borgShip)===true){
+      loseGame();
+    }
+    else{
+    movement.up(federation[i+3]);
+    movement.left(federation[i]);
+    }
+  }
+};
+function shipMovement(dx, dy){
+  return function (ship){
+    context.clearRect(ship.x, ship.y, ship.width, ship.height);
+    ship.x += dx;
+    ship.y += dy;
+    ship.draw(context);
+  }
+};
 
+  // moves ships towards BORG
+movement = {
+  left: shipMovement(-30,-1),
+  up: shipMovement(1, -30)
 };
 
   ///GAME///
 startGame();
-setTimeout(gameDraw,2000);
+setTimeout(gameDraw,1000);
