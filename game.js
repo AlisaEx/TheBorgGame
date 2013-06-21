@@ -1,9 +1,28 @@
+(function(){
 var spaceCanvas = document.getElementById('space');
 var context = spaceCanvas.getContext('2d');
 var clickCount = 0;
 var animate = null;
 var federation = [];
+function collides(a, b) {
+  return a.x < b.x + b.width && a.x + a.width > b.x &&
+         a.y < b.y + b.height && a.y + a.height > b.y;
+};
+function Entity(x,y,width,height,speed){
+  this.x = x;
+  this.y = y;
+  this.width = width;
+  this.height = height;
+  this.speed = speed;
+};
+Entity.prototype.draw = function(){
+  context.beginPath();
+    context.rect(this.x, this.y, this.width, this.height);
+    context.fillStyle = 'black';
+    context.closePath();
+    context.fill();   
 
+};
 borg = {
 x: 0, y:0, width: 400, height: 400, dx: 0, dy: 0, imageLocation: 'images/borg.png'};
 
@@ -24,7 +43,7 @@ function tractorBeam(context){
   federation.forEach(function(ship){
     context.beginPath();
     context.moveTo(220,95);
-    context.lineTo(ship.x+ship.width, ship.y+ship.height);
+    context.lineTo(ship.x+(ship.width/2), ship.y+(ship.height/2));
     context.lineWidth = 3;
     context.strokeStyle = 'green';
     context.stroke();
@@ -64,9 +83,10 @@ function loseGame(){
 };
 function attackBorg(){
   for (var i = 0; i < 5; i++) {
-    if (collides(federation[i], borgShip)===true){
+    if (collides(federation[i], borgShip)===true || collides(federation[i+5], borgShip)===true){
       loseGame();
     }
+
     else{
     movement(federation[i+5]);
     movement(federation[i]);
@@ -85,3 +105,4 @@ movement = function(ship){
   ///GAME///
 startGame();
 setTimeout(gameDraw,1000);
+}())
