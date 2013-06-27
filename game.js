@@ -5,8 +5,6 @@ var clickCount = 0;
 var animate = null;
 var federation = [];
 var start = false;
-var textX = 100;
-var textY = spaceCanvas.height;
 
 function collides(a, b) {
   return a.x < b.x + b.width && a.x + a.width > b.x &&
@@ -23,7 +21,7 @@ function Entity(x,y,width,height,speed){
 Entity.prototype.draw = function(){
   context.beginPath();
   context.rect(this.x, this.y, this.width, this.height);
-  context.fillStyle = 'black';
+  context.fillStyle = 'white';
   context.closePath();
   context.fill();   
 };
@@ -68,27 +66,8 @@ function whichKeyPress(e){
   }
 }
 
-var text = ["Stardate 58.3582749:",
-    "The starfleet has been attacked by a BORG vessel.",
-    "lkasdfjnasdf", "enter to start"];
-function scrollText(){
-  for (i =  text.length-1; i >= 0; i--) {
-    context.fillStyle = 'white';
-    context.font = '30pt Arial';
-    context.fillText(text[i], textX, textY);
-    textY -= 50;
-    context.clearRect(spaceCanvas.width, 10, textX,textY+50);
-  }
-  // context.clearRect(spaceCanvas.width, spaceCanvas.height, 0,0);
-  setTimeout(scrollText,100);
-}
 
 function startGame(){
-  // context.font = '30pt Ariel';
-  // context.fillStyle = 'white';
-  // context.fillText("Defeat the BORG ship",textX,textY);
-  // context.fillText("Press Enter to begin",textX,textY+100);
-  animate = setTimeout(scrollText,100);
   document.onkeypress = whichKeyPress;
 };
 
@@ -129,16 +108,15 @@ function gameDraw(){
     startGame();
   }
   else{
-    clearInterval(animate);
     context.clearRect(0,0,spaceCanvas.width, spaceCanvas.height);
     federation.forEach(function(ships){
       ships.draw();
     })
     drawBorg();
-    spaceCanvas.addEventListener('click', clickMouse, false);
-  }
+    window.addEventListener('click', clickMouse, false);
+}
 };
 
   ///GAME///
 gameDraw();
-}())
+}());
