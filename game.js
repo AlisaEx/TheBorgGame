@@ -164,6 +164,6 @@ function gameLoop(){
 
 
   ///GAME///
-setTimeout(gameLoop,20000);
+setTimeout(gameLoop,50000);
 
 }());

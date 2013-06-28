@@ -191,11 +191,11 @@ h1
 {
 	position: absolute;
 	top: 100%;
-	-webkit-animation: scroll 100s linear 4s infinite;
-	-moz-animation: scroll 100s linear 4s infinite;
-	-ms-animation: scroll 100s linear 4s infinite;
-	-o-animation: scroll 100s linear 4s infinite;
-	animation: scroll 100s linear 4s infinite;
+	-webkit-animation: scroll 100s linear 4s;
+	-moz-animation: scroll 100s linear 4s;
+	-ms-animation: scroll 100s linear 4s;
+	-o-animation: scroll 100s linear 4s;
+	animation: scroll 100s linear 4s;
 }
 
 /* animation */
