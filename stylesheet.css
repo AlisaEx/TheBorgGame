@@ -4,10 +4,6 @@ body{
 	background-size: 100%;
 }
 
-canvas{
-	z-index: 30;
-}
-
 @import url(http://fonts.googleapis.com/css?family=Droid+Sans:400,700);
 
 * { padding: 0; margin: 0; }

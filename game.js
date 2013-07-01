@@ -10,27 +10,29 @@ function collides(a, b) {
          a.y < b.y + b.height && a.y + a.height > b.y;
 };
 
-function Entity(x,y,width,height,speed){
+function Entity(x,y,width,height,speed,color){
   this.x = x;
   this.y = y;
   this.width = width;
   this.height = height;
   this.speed = speed;
+  this.color = color;
 };
 Entity.prototype.draw = function(){
   context.beginPath();
   context.rect(this.x, this.y, this.width, this.height);
-  context.fillStyle = 'white';
+  context.fillStyle = this.color;
   context.closePath();
   context.fill();   
 };
 
-borg = {x: 0, y:0, width: 400, height: 400, dx: 0, dy: 0, imageLocation: 'images/borg.png'};
+borg = {x: 0, y:0, width: 400, height: 400, imageLocation: 'images/borg.png'};
+borgHealth = new Entity(50, spaceCanvas.height-30, 100, 30, 0, 'red');
 
   // loop to create federation ships
 for (i=0; i<5; i++){
-  federation[i] = new Entity(600, (i+1)*75, 50, 10, 0.003);
-  federation[i+5] = new Entity((i+1)*75, 600, 10, 50, 0.003);
+  federation[i] = new Entity(600, (i+1)*75, 50, 10, 0.003, 'white');
+  federation[i+5] = new Entity((i+1)*75, 600, 10, 50, 0.003, 'white');
 };
 
 
@@ -45,7 +47,6 @@ function tractorBeam(context){
   })
 };
 
-
 drawBorg = function() {
   borgShip = new Image();
   borgShip.src = borg.imageLocation;
@@ -56,7 +57,7 @@ drawBorg = function() {
 
 function fireMissile(){
   federation.forEach(function(ship){
-    missile = new Entity(ship.x-(ship.width/2), ship.y-(ship.height/2), 10,10,0.005);
+    missile = new Entity(ship.x-(ship.width/2), ship.y-(ship.height/2), 10,10,0.005, 'white');
     bullets.push(missile);
   })
     moveMissile();
@@ -71,6 +72,7 @@ function moveMissile(){
         })
         clearInterval(animate);
         bullets.length = 0;
+        loseHealth();
       }
       else{
         movement.left(bullets[i]);
@@ -80,7 +82,11 @@ function moveMissile(){
     }
 }
 };
-
+function loseHealth(){
+  context.clearRect(borgHealth.x, borgHealth.y, borgHealth.width, borgHealth.height);
+  borgHealth.width -= 50;
+  borgHealth.draw();
+}
 
 function whichKeyPress(e){
   if(e.keyCode === 32){
@@ -141,8 +147,9 @@ function gameLoop(){
     ships.draw();
   })
   drawBorg();
+  borgHealth.draw();
   document.onkeypress = whichKeyPress;
-  setTimeout(attackBorg,6000);
+  // setTimeout(attackBorg,6000);
 }
 
 
