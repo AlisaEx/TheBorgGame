@@ -93,7 +93,7 @@ function loseHealth(){
   borgHealth.draw();
 }
 
-function whichKeyPress(e){
+function detectSpace(e){
   if(e.keyCode === 32){
     fireMissile();
   }
@@ -153,11 +153,7 @@ function gameLoop(){
   })
   drawBorg();
   borgHealth.draw();
-  document.onkeypress = whichKeyPress;
+  document.onkeypress = detectSpace;
 }
-
-
-  ///GAME///
-setTimeout(gameLoop,50000);
-
+setTimeout(gameLoop, 80000);
 }());
