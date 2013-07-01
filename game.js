@@ -1,7 +1,6 @@
 (function(){
 var spaceCanvas = document.getElementById('space');
 var context = spaceCanvas.getContext('2d');
-var clickCount = 0;
 var animate = null;
 var federation = [];
 var bullets = [];
@@ -36,17 +35,14 @@ for (i=0; i<5; i++){
 
 
 function tractorBeam(context){
-  if(clickCount===0){
-    federation.forEach(function(ship){
-      context.beginPath();
-      context.moveTo(220,95);
-      context.lineTo(ship.x+(ship.width/2), ship.y+(ship.height/2));
-      context.lineWidth = 3;
-      context.strokeStyle = 'green';
-      context.stroke();
-      clickCount += 1;
-    })
-  }
+  federation.forEach(function(ship){
+    context.beginPath();
+    context.moveTo(220,95);
+    context.lineTo(ship.x+(ship.width/2), ship.y+(ship.height/2));
+    context.lineWidth = 3;
+    context.strokeStyle = 'green';
+    context.stroke();
+  })
 };
 
 
@@ -60,26 +56,29 @@ drawBorg = function() {
 
 function fireMissile(){
   federation.forEach(function(ship){
-    pew = new Entity(ship.x, ship.y, 10,10,0.005);
-    bullets.push(pew);
+    missile = new Entity(ship.x-(ship.width/2), ship.y-(ship.height/2), 10,10,0.005);
+    bullets.push(missile);
   })
     moveMissile();
 };
 
 function moveMissile(){
-  for (var i = 0; i < 5; i++){
-    if(collides(bullets[i],borgShip)===true || collides(bullets[i+5], borgShip)===true){
-      bullets.forEach(function(pew){
-        context.clearRect(pew.x, pew.y, pew.width, pew.height);
-      })
-      bullets.length = 0;
+  if(bullets.length>0){
+    for (var i = 0; i < 5; i++){
+      if(collides(bullets[i],borgShip)===true || collides(bullets[i+5], borgShip)===true){
+        bullets.forEach(function(pew){
+          context.clearRect(pew.x, pew.y, pew.width, pew.height);
+        })
+        clearInterval(animate);
+        bullets.length = 0;
+      }
+      else{
+        movement.left(bullets[i]);
+        movement.up(bullets[i+5]);
+        animate = setInterval(moveMissile, 50);
+      }
     }
-    else{
-      movement.left(bullets[i]);
-      movement.up(bullets[i+5]);
-      animate = setInterval(moveMissile, 50);
-    }
-  }
+}
 };
 
 
@@ -90,18 +89,10 @@ function whichKeyPress(e){
 };
 
 function attackBorg(){
-  if(clickCount===0){
-    federation.forEach(function(ship){
-      context.beginPath();
-      context.moveTo(220,95);
-      context.lineTo(ship.x+(ship.width/2), ship.y+(ship.height/2));
-      context.lineWidth = 3;
-      context.strokeStyle = 'green';
-      context.stroke();
-      clickCount += 1;
-    })
-  }
-  else{
+  document.onkeypress = null;
+  clearInterval(animate);
+  tractorBeam(context);
+  animate = setInterval(attackBorg,500);
   for (var i = 0; i < 5; i++) {
     if (collides(federation[i], borgShip)===true || collides(federation[i+5], borgShip)===true){
       loseGame();
@@ -112,8 +103,6 @@ function attackBorg(){
     movement.capture(federation[i]);
     }
   }
-  }
-  animate = setInterval(attackBorg,1000);
 };
 
 
@@ -141,7 +130,6 @@ movement = {
 
 function loseGame(){
   clearInterval(animate);
-  spaceCanvas.removeEventListener('click', attackBorg);
   context.clearRect(0, 0, spaceCanvas.width, spaceCanvas.height)
   context.font = '30pt Ariel';
   context.fillStyle = 'white';
@@ -153,8 +141,8 @@ function gameLoop(){
     ships.draw();
   })
   drawBorg();
-  spaceCanvas.addEventListener('click', attackBorg, false);
   document.onkeypress = whichKeyPress;
+  setTimeout(attackBorg,6000);
 }
 
 
