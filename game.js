@@ -59,23 +59,27 @@ drawBorg = function() {
 };
 
 function fireMissile(){
-  if(bullets.length < 20){
-    federation.forEach(function(ship){
-      pew = new Entity(ship.x, ship.y, 10,10,0.05);
-      bullets.push(pew);
-    })
-  }
-  else{
+  federation.forEach(function(ship){
+    pew = new Entity(ship.x, ship.y, 10,10,0.005);
+    bullets.push(pew);
+  })
     moveMissile();
-  }
 };
 
 function moveMissile(){
   for (var i = 0; i < 5; i++){
-    movement.left(bullets[i]);
-    movement.up(bullets[i+5]);
+    if(collides(bullets[i],borgShip)===true || collides(bullets[i+5], borgShip)===true){
+      bullets.forEach(function(pew){
+        context.clearRect(pew.x, pew.y, pew.width, pew.height);
+      })
+      bullets.length = 0;
+    }
+    else{
+      movement.left(bullets[i]);
+      movement.up(bullets[i+5]);
+      animate = setInterval(moveMissile, 50);
+    }
   }
-  animate = setInterval(moveMissile, 1000);
 };
 
 
@@ -109,7 +113,7 @@ function attackBorg(){
     }
   }
   }
-  animate = setInterval(attackBorg,500);
+  animate = setInterval(attackBorg,1000);
 };
 
 
@@ -123,13 +127,13 @@ movement = {
     ship.draw(context); 
   },
   left: function(pew){
-    context.clearRect(pew.x, pew.y, pew.width, pew.height);
-    pew.x -= 50;
+    context.clearRect(pew.x, pew.y, pew.width*2, pew.height*2);
+    pew.x -= 10*pew.speed;
     pew.draw(context);
   },
   up: function(pew){
-    context.clearRect(pew.x, pew.y, pew.width, pew.height);
-    pew.y -= 50;
+    context.clearRect(pew.x, pew.y, pew.width*2, pew.height*2);
+    pew.y -= 10*pew.speed;
     pew.draw(context);    
   }
 };
@@ -144,15 +148,6 @@ function loseGame(){
   context.fillText("You have been assimilated.",300,500);
 };
 
-
-function gameDraw(){
-    context.clearRect(0,0,spaceCanvas.width, spaceCanvas.height);
-    federation.forEach(function(ships){
-      ships.draw();
-    })
-    drawBorg();
-};
-
 function gameLoop(){
   federation.forEach(function(ships){
     ships.draw();
@@ -164,6 +159,6 @@ function gameLoop(){
 
 
   ///GAME///
-setTimeout(gameLoop,50000);
+setTimeout(gameLoop,5000);
 
 }());
