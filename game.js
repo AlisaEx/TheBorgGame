@@ -31,8 +31,8 @@ borgHealth = new Entity(50, spaceCanvas.height-30, 100, 30, 0, 'red');
 
   // loop to create federation ships
 for (i=0; i<5; i++){
-  federation[i] = new Entity(600, (i+1)*75, 50, 10, 0.003, 'white');
-  federation[i+5] = new Entity((i+1)*75, 600, 10, 50, 0.003, 'white');
+  federation[i] = new Entity(600, (i+1)*75, 50, 10, 0.03, 'white');
+  federation[i+5] = new Entity((i+1)*75, 600, 10, 50, 0.03, 'white');
 };
 
 
@@ -72,7 +72,12 @@ function moveMissile(){
         })
         clearInterval(animate);
         bullets.length = 0;
-        loseHealth();
+        if (borgHealth.width===30){
+          attackBorg();
+        }
+        else{
+          loseHealth();
+        }
       }
       else{
         movement.left(bullets[i]);
@@ -84,7 +89,7 @@ function moveMissile(){
 };
 function loseHealth(){
   context.clearRect(borgHealth.x, borgHealth.y, borgHealth.width, borgHealth.height);
-  borgHealth.width -= 50;
+  borgHealth.width -= 10;
   borgHealth.draw();
 }
 
@@ -116,7 +121,7 @@ function attackBorg(){
   // moves ships towards BORG
 movement = {
   capture: function(ship){
-    context.clearRect(ship.x, ship.y, ship.width+20, ship.height+20);
+    context.clearRect(ship.x, ship.y, ship.width+100, ship.height+100);
     ship.x += (220-ship.x)*ship.speed;
     ship.y += (95-ship.y)*ship.speed;
     ship.draw(context); 
@@ -149,11 +154,10 @@ function gameLoop(){
   drawBorg();
   borgHealth.draw();
   document.onkeypress = whichKeyPress;
-  // setTimeout(attackBorg,6000);
 }
 
 
   ///GAME///
-setTimeout(gameLoop,5000);
+setTimeout(gameLoop,50000);
 
 }());
