@@ -27,7 +27,7 @@ Entity.prototype.draw = function(){
 };
 
 borg = {x: 0, y:0, width: 400, height: 400, imageLocation: 'images/borg.png'};
-borgHealth = new Entity(50, spaceCanvas.height-30, 100, 30, 0, 'red');
+borgHealth = new Entity(spaceCanvas.width-200, 50, 200, 20, 0, 'green');
 
   // loop to create federation ships
 for (i=0; i<5; i++){
@@ -72,7 +72,7 @@ function moveMissile(){
         })
         clearInterval(animate);
         bullets.length = 0;
-        if (borgHealth.width===30){
+        if (borgHealth.width<60){
           attackBorg();
         }
         else{
@@ -89,7 +89,7 @@ function moveMissile(){
 };
 function loseHealth(){
   context.clearRect(borgHealth.x, borgHealth.y, borgHealth.width, borgHealth.height);
-  borgHealth.width -= 10;
+  borgHealth.width -= 30;
   borgHealth.draw();
 }
 
@@ -115,9 +115,6 @@ function attackBorg(){
     }
   }
 };
-
-
-
   // moves ships towards BORG
 movement = {
   capture: function(ship){
@@ -137,22 +134,24 @@ movement = {
     pew.draw(context);    
   }
 };
-
-
 function loseGame(){
   clearInterval(animate);
   context.clearRect(0, 0, spaceCanvas.width, spaceCanvas.height)
-  context.font = '30pt Ariel';
+  context.font = '30pt Courier New';
   context.fillStyle = 'white';
-  context.fillText("You have been assimilated.",300,500);
+  context.fillText("Resistance is futile.",300,300);
+  context.fillText("You have been assimilated.",200,400);
+  context.fillText("GAME OVER.",350,500);
 };
-
 function gameLoop(){
   federation.forEach(function(ships){
     ships.draw();
   })
   drawBorg();
   borgHealth.draw();
+  context.font = '13pt Courier New';
+  context.fillStyle = 'white';
+  context.fillText("BORG shield level: ", borgHealth.x, borgHealth.y-borgHealth.height);
   document.onkeypress = detectSpace;
 }
 setTimeout(gameLoop, 80000);
